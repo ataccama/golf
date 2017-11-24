@@ -1,0 +1,10 @@
+dependencies {
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+	
+	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+	
+	compile group: 'org.mapstruct', name: 'mapstruct-jdk8'
+    compileOnly group: 'org.mapstruct', name: 'mapstruct-processor'
+}

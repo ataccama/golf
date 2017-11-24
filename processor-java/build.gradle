@@ -1,0 +1,9 @@
+apply from: "$rootDir/service.gradle"
+
+bootRepackage {
+    mainClass = 'com.ataccama.golf.processor.App'
+}
+
+dependencies {
+	compile project(':processor-docker')
+}

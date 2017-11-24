@@ -1,0 +1,7 @@
+dependencies {
+	compile project(':processor')
+	
+	compile group: 'com.spotify', name: 'docker-client'
+	
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+}

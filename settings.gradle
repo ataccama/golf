@@ -1,0 +1,19 @@
+def excludes = ['bin', 'build', 'master'] as Set<String>
+def exclude = { proj -> excludes.add proj.toString() }
+
+
+// if you want to exclude or include a project, put it here
+// exclude 'excluded-subproject-name'
+
+
+// root project settings
+rootProject.name = file(".").name
+println rootProject.name + ": using Java " + JavaVersion.current()
+println rootProject.name + ": excluding: " + excludes
+
+// include everything which looks like a Gradle project
+file(".").listFiles((FileFilter) { file ->
+    new File(file, "build.gradle").exists() && !excludes.contains(file.name)
+}).each { subproject ->
+    include subproject.name
+}

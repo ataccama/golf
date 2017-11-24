@@ -1,0 +1,67 @@
+version: '2'
+services:
+  rabbitmq:
+    image: juriad/rabbitmq
+    ports:
+    - 5672:5672
+    - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbituser
+      RABBITMQ_DEFAULT_PASS: rabbitpw
+  postgres:
+    image: postgres:10
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_DB: golf
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password123
+  gateway:
+    image: juriad/gateway
+    ports:
+    - 8080:8080
+    environment:
+      JDBC_CONNECTION: jdbc:postgresql://postgres:5432/golf?currentSchema=public
+      JDBC_USERNAME: root
+      JDBC_PASSWORD: password123
+      RABBIT_HOST: rabbitmq
+      RABBIT_USERNAME: rabbituser
+      RABBIT_PASSWORD: rabbitpw
+    depends_on:
+    - postgres
+    - rabbitmq
+  grader-fib:
+    image: juriad/grader-fib
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USERNAME: rabbituser
+      RABBIT_PASSWORD: rabbitpw
+    depends_on:
+    - rabbitmq
+  dind:
+    image: docker:stable-dind
+    privileged: true
+    volumes:
+    - docker:/var/lib/docker
+    - solutions:/solutions
+  processor-java:
+    image: juriad/processor-java
+    environment:
+      DOCKER_IMAGE: juriad/runner-java
+      DOCKER_TIMEOUT: 5000
+      DOCKER_HOST: dind
+      RABBIT_HOST: rabbitmq
+      RABBIT_USERNAME: rabbituser
+      RABBIT_PASSWORD: rabbitpw
+      DEBUG_PORT: 5005
+    ports:
+    - 5005:5005
+    volumes:
+    - docker:/var/lib/docker
+    - solutions:/solutions
+    depends_on:
+    - rabbitmq
+    - dind
+volumes:
+  solutions: null
+  docker: null

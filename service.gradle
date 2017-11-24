@@ -1,0 +1,19 @@
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'app'
+}
+
+bootRun {
+    // can pass user system properties through gradle.properties (version control ignored)
+    systemProperties = System.properties
+}
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-logging'
+    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
+}
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2'
+}

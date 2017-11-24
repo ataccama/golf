@@ -1,0 +1,9 @@
+dependencies {
+	compile project(':commons')
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp'
+	
+	compile group: 'com.spotify', name: 'docker-client'
+
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+}

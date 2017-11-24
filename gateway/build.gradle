@@ -1,0 +1,16 @@
+apply from: "$rootDir/service.gradle"
+
+dependencies {
+	compile project(':commons')
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp'
+	
+	compile group: 'org.postgresql', name: 'postgresql'
+	compile group: 'org.flywaydb', name: 'flyway-core'
+
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+	
+	compile group: 'org.mapstruct', name: 'mapstruct-jdk8'
+    compileOnly group: 'org.mapstruct', name: 'mapstruct-processor'
+}

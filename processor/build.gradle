@@ -1,0 +1,9 @@
+dependencies {
+	compile project(':commons')
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp'
+	
+	compile group: 'commons-io', name: 'commons-io'
+
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+}

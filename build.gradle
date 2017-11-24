@@ -1,0 +1,70 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '1.5.2.RELEASE' apply false
+}
+
+allprojects {
+    group = "com.ataccama.golf"
+    version = "1.0.0"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    configurations {
+        compile.exclude module: 'spring-boot-starter-logging'
+    	compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
+    }
+
+    ext {
+		postgresqlConnectorVersion = '42.1.4'
+		commonsIoVersion = '2.6'
+		mapstructVersion = '1.2.0.Final'
+		dockerClientVersion = '8.9.2'
+    }
+    ext['flyway.version'] = '4.0.3'
+    ext['hibernate.version'] = '5.2.12.Final'
+
+    dependencyManagement {
+        imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+
+        dependencies {
+            dependency group: 'org.postgresql', name: 'postgresql', version: postgresqlConnectorVersion
+            
+            dependency group: 'commons-io', name: 'commons-io', version: commonsIoVersion
+            
+            dependency group: 'com.spotify', name: 'docker-client', version: dockerClientVersion
+            
+            dependencySet(group: 'org.mapstruct', version: mapstructVersion) {
+                entry 'mapstruct-jdk8'
+                entry 'mapstruct-processor'
+            }
+            
+            // fixes https://github.com/spring-gradle-plugins/dependency-management-plugin/issues/59
+            dependency group: 'log4j', name: 'log4j', version: '1.2.17'
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}

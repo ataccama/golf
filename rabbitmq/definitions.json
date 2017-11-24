@@ -1,0 +1,114 @@
+{
+	"rabbit_version": "3.6.14",
+	"users": [
+		{
+			"name": "rabbituser",
+			"password": "rabbitpw",
+			"tags": "administrator"
+		}
+	],
+	"vhosts": [
+		{
+			"name": "/"
+		}
+	],
+	"permissions": [
+		{
+			"user": "rabbituser",
+			"vhost": "/",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		}
+	],
+	"parameters": [
+	],
+	"policies": [
+	],
+	"exchanges": [
+		{
+			"name": "submitted",
+			"vhost": "/",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+				"alternate-exchange": "submitted.alternate"
+			}
+		},
+		{
+			"name": "submitted.alternate",
+			"vhost": "/",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+			}
+		},
+		{
+			"name": "processed",
+			"vhost": "/",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+			}
+		},
+		{
+			"name": "graded",
+			"vhost": "/",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+			}
+		},
+		{
+			"name": "discover",
+			"vhost": "/",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+			}
+		},
+		{
+			"name": "register",
+			"vhost": "/",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+			}
+		}
+	],
+	"queues": [
+		{
+			"name": "submitted.rest",
+			"vhost": "/",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-dead-letter-exchange": "submitted",
+				"x-message-ttl": 60000
+			}
+		}
+	],
+	"bindings": [
+		{
+			"source": "submitted.alternate",
+			"vhost": "/",
+			"destination": "submitted.rest",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {
+			}
+		}
+	]
+}
