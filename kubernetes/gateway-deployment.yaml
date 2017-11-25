@@ -10,7 +10,8 @@ metadata:
   name: gateway
 spec:
   replicas: 1
-  strategy: {}
+  strategy: {
+    }
   template:
     metadata:
       creationTimestamp: null
@@ -31,10 +32,14 @@ spec:
           value: rabbitpw
         - name: RABBIT_USERNAME
           value: rabbituser
+        - name: FORCE_PULL
+          value: '3'
         image: juriad/gateway
         name: gateway
         ports:
         - containerPort: 8080
-        resources: {}
+        resources: {
+          }
       restartPolicy: Always
-status: {}
+status: {
+  }

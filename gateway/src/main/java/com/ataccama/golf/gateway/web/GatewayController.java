@@ -1,10 +1,11 @@
 package com.ataccama.golf.gateway.web;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class GatewayController {
 	private ServiceRegistry registry;
 
 	@PostMapping(path = "/submit")
-	public UUID submit(@RequestBody NewSolution dto) {
+	public SolutionDTO submit(@RequestBody NewSolution dto) {
 		validateNewSolution(dto);
 
 		Solution solution = dbService.save(mapper.toDb(dto));
@@ -50,7 +51,7 @@ public class GatewayController {
 
 		messagingService.submit(mapper.toMessage(solution));
 
-		return solution.getId();
+		return mapper.toDto(solution);
 	}
 
 	private void validateNewSolution(NewSolution dto) {
@@ -75,14 +76,21 @@ public class GatewayController {
 		if (dto.getTask() == null) {
 			throw new BadRequestException("The task is not specified.");
 		}
-		if (!registry.containsLanguage(dto.getLanguage())) {
+		if (!registry.containsTask(dto.getTask())) {
 			throw new BadRequestException("The task is not supported.");
 		}
 	}
 
 	@GetMapping(path = "/check")
-	public List<SolutionDTO> get(@RequestParam("ids") Set<UUID> ids) {
-		List<Solution> solutions = dbService.get(ids);
+	public List<SolutionDTO> get(@RequestParam("ids") List<UUID> ids) {
+		List<Solution> solutions = dbService.get(new HashSet<>(ids));
+
+		Map<UUID, Integer> positions = new HashMap<>();
+		for (int i = 0; i < ids.size(); i++) {
+			positions.put(ids.get(i), i);
+		}
+
+		solutions.sort(Comparator.comparing(s -> positions.get(s.getId())));
 		return mapper.toDtos(solutions);
 	}
 
