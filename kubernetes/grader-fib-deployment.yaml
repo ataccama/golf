@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /home/adam/kompose convert
+    kompose.version: 1.5.0 (999278f)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grader-fib
+  name: grader-fib
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: grader-fib
+    spec:
+      containers:
+      - env:
+        - name: RABBIT_HOST
+          value: rabbitmq
+        - name: RABBIT_PASSWORD
+          value: rabbitpw
+        - name: RABBIT_USERNAME
+          value: rabbituser
+        image: juriad/grader-fib
+        name: grader-fib
+        resources: {}
+      restartPolicy: Always
+status: {}

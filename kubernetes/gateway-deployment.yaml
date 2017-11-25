@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /home/adam/kompose convert
+    kompose.version: 1.5.0 (999278f)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gateway
+  name: gateway
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gateway
+    spec:
+      containers:
+      - env:
+        - name: JDBC_CONNECTION
+          value: jdbc:postgresql://postgres:5432/golf?currentSchema=public
+        - name: JDBC_PASSWORD
+          value: password123
+        - name: JDBC_USERNAME
+          value: root
+        - name: RABBIT_HOST
+          value: rabbitmq
+        - name: RABBIT_PASSWORD
+          value: rabbitpw
+        - name: RABBIT_USERNAME
+          value: rabbituser
+        image: juriad/gateway
+        name: gateway
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+status: {}

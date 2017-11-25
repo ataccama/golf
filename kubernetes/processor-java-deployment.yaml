@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /home/adam/kompose convert
+    kompose.version: 1.5.0 (999278f)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: processor-java
+  name: processor-java
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: processor-java
+    spec:
+      containers:
+      - name: processor-java
+        env:
+        - name: DOCKER_HOST
+          value: localhost
+        - name: DOCKER_IMAGE
+          value: juriad/runner-java
+        - name: DOCKER_TIMEOUT
+          value: "5000"
+        - name: RABBIT_HOST
+          value: rabbitmq
+        - name: RABBIT_PASSWORD
+          value: rabbitpw
+        - name: RABBIT_USERNAME
+          value: rabbituser
+        image: juriad/processor-java
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/docker
+          name: docker
+        - mountPath: /solutions
+          name: solutions
+      - name: dind
+        image: docker:stable-dind
+        resources: {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /var/lib/docker
+          name: docker
+        - mountPath: /solutions
+          name: solutions
+      restartPolicy: Always
+      volumes:
+      - name: docker
+        emptyDir: {}
+      - name: solutions
+        emptyDir: {}
+status: {}
