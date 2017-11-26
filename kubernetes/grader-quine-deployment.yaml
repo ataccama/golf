@@ -27,7 +27,7 @@ spec:
         - name: RABBIT_USERNAME
           value: rabbituser
         - name: VERSION
-          value: '5'
+          value: '6'
         image: juriad/grader-quine
         name: grader-quine
         resources: {
