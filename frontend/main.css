@@ -1,0 +1,89 @@
+body {
+	/*color: rgb(0, 166, 152);*/
+	font-family: "Open Sans", Arial, sans-serif;
+	font-size: 1.2rem;
+}
+
+/* 
+header 
+*/
+.header {
+	background: #6451a2;
+	display: flex;
+	align-items: center;
+}
+
+.logo img {
+	width: 100%;
+	display: block;
+}
+
+.motto {
+	text-align: center;
+	color: white;
+}
+
+/* 
+content
+*/
+.mb-0 a {
+	color: #45386f;
+}
+
+.card-header {
+	padding: 0;
+}
+
+.card-header a {
+	display: block;
+	padding: .75rem 1.25rem;
+}
+
+/* 
+tasks
+*/
+.editor {
+	height: 10em;
+}
+
+.btn-primary {
+	background: #6451a2;
+	border-color: #6451a2;
+}
+
+.btn-primary:hover {
+	background: #45386f;
+	border-color: #45386f;
+}
+
+/* 
+submissions
+*/
+#submissions {
+	font-size: 1rem;
+	line-height: 1rem;
+}
+
+.submission dl.row {
+	margin-bottom: 0;
+}
+
+.submission dl pre {
+	margin-bottom: 0;
+}
+
+.submission.unknown {
+	border: 2px solid silver;
+}
+
+.submission.correct {
+	border: 2px solid green;
+}
+
+.submission.failed {
+	border: 2px solid orange;
+}
+
+.submission.wrong {
+	border: 2px solid red;
+}
