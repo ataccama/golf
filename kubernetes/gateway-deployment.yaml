@@ -33,7 +33,7 @@ spec:
         - name: RABBIT_USERNAME
           value: rabbituser
         - name: VERSION
-          value: '4'
+          value: '5'
         image: juriad/gateway
         name: gateway
         ports:

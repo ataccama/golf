@@ -1,0 +1,9 @@
+apply from: "$rootDir/service.gradle"
+
+dependencies {
+	compile project(':grader')
+}
+
+bootRepackage {
+    mainClass = 'com.ataccama.golf.grader.App'
+}

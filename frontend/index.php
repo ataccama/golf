@@ -129,6 +129,10 @@ foreach ($services->tasks as $task) {
 										<label class="textAreaLabel" for="editor-<?= $task->id ?>">Type
 											your code here:</label>
 										<div class="editor" id="task-editor-<?= $task->id ?>"></div>
+										<p>
+											Your code is using <span class="task-count">0</span>
+											characters.
+										</p>
 									</div>
 									<button type="submit" class="btn btn-primary submit"
 										id="task-submit-<?= $task->id ?>">Submit solution</button>

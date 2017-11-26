@@ -8,6 +8,7 @@ $(document).ready(function() {
 			var submission = $(this);
 			var existing = submissionsElement.find('#' + submission.attr('id'));
 			if (existing.length) {
+				existing.attr('class', submission.attr('class'));
 				existing.find('.card-header a').replaceWith(submission.find('.card-header a'));
 				existing.find('.card-body').replaceWith(submission.find('.card-body'));
 			} else {
@@ -39,7 +40,17 @@ $(document).ready(function() {
 		var languageElement = taskElement.find('.task-language select');
 		var editorElement = taskElement.find('.editor');
 		var editor = ace.edit(editorElement.attr('id'));
-		editor.setFontSize(16);
+		editor.setOptions({
+			fontSize: 16,
+			minLines: 5,
+			maxLines: 20
+		});
+		
+		var countElement = taskElement.find('.task-count');
+		editor.getSession().on('change', function(){
+			var normalized = editor.session.getValue().trim().replace('\r\n', '\n');
+			countElement.text(normalized.length);
+		});
 
 		function languageFunction() {
 			var lang = languageElement.val();

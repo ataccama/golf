@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.5.0 (999278f)
   creationTimestamp: null
   labels:
-    io.kompose.service: grader-quine
-  name: grader-quine
+    io.kompose.service: grader-pascal
+  name: grader-pascal
 spec:
   replicas: 1
   strategy: {
@@ -16,7 +16,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: grader-quine
+        io.kompose.service: grader-pascal
     spec:
       containers:
       - env:
@@ -27,9 +27,9 @@ spec:
         - name: RABBIT_USERNAME
           value: rabbituser
         - name: VERSION
-          value: '7'
-        image: juriad/grader-quine
-        name: grader-quine
+          value: '3'
+        image: juriad/grader-pascal
+        name: grader-pascal
         resources: {
           }
       restartPolicy: Always
