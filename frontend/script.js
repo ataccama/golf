@@ -3,8 +3,11 @@ $(document).ready(function() {
 	var submissionsElement = $('#submissions');
 	
 	function updateSubmissions(data) {
-		submissionsElement.find('empty').remove();
-		$($(data).get().reverse()).each(function() {
+		var updatedSubmissions = $($(data).get().reverse());
+		if (updatedSubmissions.length) {
+			submissionsElement.find('.empty').remove();
+		}
+		updatedSubmissions.each(function() {
 			var submission = $(this);
 			var existing = submissionsElement.find('#' + submission.attr('id'));
 			if (existing.length) {
@@ -65,22 +68,33 @@ $(document).ready(function() {
 
 			var email = emailElement.val();
 			if (/^\s*$/.test(email)) {
-				alert("Please fill the email before submitting.");
 				$('#collapseIntro').collapse('show');
-				$('#email').focus()
+				ezBSAlert({
+					messageText: "Please fill the email before submitting.",
+					alertType: "danger"
+				}).done(function() {
+					$('#email').focus();
+				});
 				return;
 			}
 
 			if (!/^\S+@\S+\.\S+$/.test(email)) {
-				alert("The provided email '" + email + "' is invalid.");
 				$('#collapseIntro').collapse('show');
-				$('#email').focus()
+				ezBSAlert({
+					messageText: "The provided email '" + email + "' is invalid.",
+					alertType: "danger"
+				}).done(function() {
+					$('#email').focus();
+				});
 				return;
 			}
 
 			var code = editor.getSession().getValue();
 			if (/^\s*$/.test(code)) {
-				alert("Please write your solution.");
+				ezBSAlert({
+					messageText: "Please write your solution.",
+					alertType: "danger"
+				});
 				return;
 			}
 
@@ -95,7 +109,14 @@ $(document).ready(function() {
 				}),
 				dataType : 'html',
 				type : 'POST',
-				success : updateSubmissions
+				success : function(data) {
+					ezBSAlert({
+						headerText: "Submission",
+						messageText: "Submission was successful. Please watch the submissions section for processing results.",
+						alertType: "info"
+					});
+					updateSubmissions(data);
+				}
 			});
 		});
 	});

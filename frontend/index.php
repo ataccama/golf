@@ -35,9 +35,12 @@ $services = send('GET', '/services');
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
 	integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
 	crossorigin="anonymous"></script>
+
 <script src="./ace-builds-1.2.9/src/ace.js"></script>
-<link rel="stylesheet" href="./main.css">
-<script type="text/javascript" src="./script.js"></script>
+
+<script src="./ezbsalert.js"></script>
+<link rel="stylesheet" href="./main.css?v=1">
+<script type="text/javascript" src="./script.js?v=1"></script>
 </head>
 
 <body>
