@@ -1,19 +1,14 @@
 package com.ataccama.golf.gateway.services;
 
-import java.util.Set;
+import java.util.List;
 
 import com.ataccama.golf.commons.Service;
+import com.ataccama.golf.commons.ServiceType;
 
 public interface ServiceRegistry {
-	void registerLanguage(Service language);
+	void register(Service service);
 
-	void registerTask(Service task);
+	List<Service> getServices(ServiceType type);
 
-	Set<Service> getLanguages();
-
-	Set<Service> getTasks();
-
-	boolean containsLanguage(String language);
-
-	boolean containsTask(String task);
+	boolean contains(ServiceType type, String id);
 }

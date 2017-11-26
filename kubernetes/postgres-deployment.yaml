@@ -32,7 +32,8 @@ spec:
         name: postgres
         ports:
         - containerPort: 5432
-        resources: {}
+        resources: {
+          }
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: pgdata
@@ -41,4 +42,5 @@ spec:
       - name: pgdata
         persistentVolumeClaim:
           claimName: pgdata
-status: {}
+status: {
+  }

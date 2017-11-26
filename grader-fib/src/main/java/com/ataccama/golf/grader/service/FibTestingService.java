@@ -13,7 +13,7 @@ public class FibTestingService implements TestingService {
 	@Override
 	public int test(String code, String output) throws TestingException {
 		if (!FIB_800.equals(output.trim())) {
-			throw new TestingException("The result is wrong. It should start with 69...");
+			throw new TestingException("The result must start with 69...");
 		}
 		return code.trim().replace("\r\n", "\n").length();
 	}

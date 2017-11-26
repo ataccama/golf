@@ -14,7 +14,7 @@ public class QuineTestingService implements TestingService {
 		output = output.trim().replace("\r\n", "\n"); // NOSONAR
 
 		if (!code.equals(output)) {
-			throw new TestingException("The result is wrong. The output must be the same as the program itself.");
+			throw new TestingException("The output must be the same as the program itself.");
 		}
 		return code.replace("\r\n", "\n").length();
 	}

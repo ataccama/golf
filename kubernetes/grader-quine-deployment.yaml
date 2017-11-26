@@ -10,7 +10,8 @@ metadata:
   name: grader-quine
 spec:
   replicas: 1
-  strategy: {}
+  strategy: {
+    }
   template:
     metadata:
       creationTimestamp: null
@@ -25,8 +26,12 @@ spec:
           value: rabbitpw
         - name: RABBIT_USERNAME
           value: rabbituser
+        - name: VERSION
+          value: '5'
         image: juriad/grader-quine
         name: grader-quine
-        resources: {}
+        resources: {
+          }
       restartPolicy: Always
-status: {}
+status: {
+  }

@@ -191,7 +191,7 @@ public class DockerRunningService implements RunningService, ApplicationListener
 		} catch (DockerException e) {
 			log = e.getMessage();
 		}
-		throw new RunningFailedException(MessageFormat.format("Exited with code {0} with log: {1}", statusCode, log));
+		throw new RunningFailedException(MessageFormat.format("Exited with code {0} and error:\n{1}", statusCode, log));
 	}
 
 	private void removeContainer(String containerId) throws RunningInternalErrorException, InterruptedException {

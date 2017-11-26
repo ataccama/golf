@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Service {
+	private ServiceType type;
+	private int order;
+
 	private String id;
 	private String name;
 	private String description;

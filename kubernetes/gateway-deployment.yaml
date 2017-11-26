@@ -32,8 +32,8 @@ spec:
           value: rabbitpw
         - name: RABBIT_USERNAME
           value: rabbituser
-        - name: FORCE_PULL
-          value: '3'
+        - name: VERSION
+          value: '4'
         image: juriad/gateway
         name: gateway
         ports:

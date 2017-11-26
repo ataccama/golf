@@ -3,10 +3,12 @@ package com.ataccama.golf.gateway.web;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ataccama.golf.commons.Constants;
 import com.ataccama.golf.commons.Service;
+import com.ataccama.golf.commons.ServiceType;
 import com.ataccama.golf.gateway.SolutionMapper;
 import com.ataccama.golf.gateway.db.DatabaseService;
 import com.ataccama.golf.gateway.db.Solution;
@@ -69,21 +72,22 @@ public class GatewayController {
 		if (dto.getLanguage() == null) {
 			throw new BadRequestException("The language is not specified.");
 		}
-		if (!registry.containsLanguage(dto.getLanguage())) {
+		if (!registry.contains(ServiceType.LANGUAGE, dto.getLanguage())) {
 			throw new BadRequestException("The language is not supported.");
 		}
 
 		if (dto.getTask() == null) {
 			throw new BadRequestException("The task is not specified.");
 		}
-		if (!registry.containsTask(dto.getTask())) {
+		if (!registry.contains(ServiceType.TASK, dto.getTask())) {
 			throw new BadRequestException("The task is not supported.");
 		}
 	}
 
 	@GetMapping(path = "/check")
 	public List<SolutionDTO> get(@RequestParam("ids") List<UUID> ids) {
-		List<Solution> solutions = dbService.get(new HashSet<>(ids));
+		Set<UUID> idsAsSet = ids.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+		List<Solution> solutions = dbService.get(idsAsSet);
 
 		Map<UUID, Integer> positions = new HashMap<>();
 		for (int i = 0; i < ids.size(); i++) {
@@ -97,8 +101,8 @@ public class GatewayController {
 	@GetMapping(path = "/services")
 	public Map<String, Collection<Service>> getServices() {
 		Map<String, Collection<Service>> map = new HashMap<>();
-		map.put("languages", registry.getLanguages());
-		map.put("tasks", registry.getTasks());
+		map.put("languages", registry.getServices(ServiceType.LANGUAGE));
+		map.put("tasks", registry.getServices(ServiceType.TASK));
 		return map;
 	}
 }

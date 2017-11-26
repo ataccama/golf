@@ -22,14 +22,12 @@ public class MessagingConsumer {
 	@Autowired
 	private SolutionMapper mapper;
 
-	// @RabbitListener(queues = "#{processedQueue}")
 	@RabbitHandler
 	public void processed(SolutionProcessedMessage message) {
 		log.info("Updating database record about processing: {}", message);
 		dbService.update(message.getId(), solution -> mapper.intoDb(message, solution));
 	}
 
-	// @RabbitListener(queues = "#{gradedQueue}")
 	@RabbitHandler
 	public void graded(SolutionGradedMessage message) {
 		log.info("Updating database record about grading: {}", message);

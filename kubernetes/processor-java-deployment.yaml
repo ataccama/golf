@@ -26,15 +26,18 @@ spec:
         - name: DOCKER_IMAGE
           value: juriad/runner-java
         - name: DOCKER_TIMEOUT
-          value: "5000"
+          value: '5000'
         - name: RABBIT_HOST
           value: rabbitmq
         - name: RABBIT_PASSWORD
           value: rabbitpw
         - name: RABBIT_USERNAME
           value: rabbituser
+        - name: VERSION
+          value: '5'
         image: juriad/processor-java
-        resources: {}
+        resources: {
+          }
         volumeMounts:
         - mountPath: /var/lib/docker
           name: docker
@@ -42,7 +45,8 @@ spec:
           name: solutions
       - name: dind
         image: docker:stable-dind
-        resources: {}
+        resources: {
+          }
         securityContext:
           privileged: true
         volumeMounts:
@@ -53,7 +57,10 @@ spec:
       restartPolicy: Always
       volumes:
       - name: docker
-        emptyDir: {}
+        emptyDir: {
+          }
       - name: solutions
-        emptyDir: {}
-status: {}
+        emptyDir: {
+          }
+status: {
+  }

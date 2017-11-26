@@ -29,7 +29,8 @@ spec:
         ports:
         - containerPort: 5672
         - containerPort: 15672
-        resources: {}
+        resources: {
+          }
         volumeMounts:
         - mountPath: /var/lib/rabbitmq
           name: rabbitdata
@@ -38,4 +39,5 @@ spec:
       - name: rabbitdata
         persistentVolumeClaim:
           claimName: rabbitdata
-status: {}
+status: {
+  }
