@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.5.0 (999278f)
   creationTimestamp: null
   labels:
-    io.kompose.service: processor-java
-  name: processor-java
+    io.kompose.service: processor-node
+  name: processor-node
 spec:
   replicas: 1
   strategy:
@@ -16,15 +16,15 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: processor-java
+        io.kompose.service: processor-node
     spec:
       containers:
-      - name: processor-java
+      - name: processor-node
         env:
         - name: DOCKER_HOST
           value: localhost
         - name: DOCKER_IMAGE
-          value: juriad/runner-java
+          value: juriad/runner-node
         - name: DOCKER_TIMEOUT
           value: '10000'
         - name: RABBIT_HOST
@@ -34,8 +34,8 @@ spec:
         - name: RABBIT_USERNAME
           value: rabbituser
         - name: VERSION
-          value: '6'
-        image: juriad/processor-java
+          value: '2'
+        image: juriad/processor-node
         resources: {
           }
         volumeMounts:
