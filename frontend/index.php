@@ -39,7 +39,7 @@
 	<script src="./ace-builds-1.2.9/src/ace.js"></script>
 
 	<script src="./ezbsalert.js"></script>
-	<link rel="stylesheet" href="./main.css?v=1">
+	<link rel="stylesheet" href="./main.css?v=2">
 	<script type="text/javascript" src="./script.js?v=1"></script>
 	<!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
