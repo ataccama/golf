@@ -87,7 +87,7 @@
 					</div>
 					<div class="col-12 col-md-6">
 						<p>In order to participate, <strong>you must provide an email address</strong>.
-							It is will only be used to inform you about the best solutions
+							It will only be used to inform you about the best solutions
 							and submission statistics, and to announce the winners.</p>
 						<p>Good luck!</p>
 						<form>
@@ -110,43 +110,6 @@
 		<div class="col-12 mb-4">
 			<h2>Tasks</h2>
 			<div id="tasks" role="tablist">
-				<!--				<div class="card">-->
-				<!--					<div class="card-header" role="tab" id="headingIntro">-->
-				<!--						<h5 class="mb-0">-->
-				<!--							<a data-toggle="collapse" href="#collapseIntro"-->
-				<!--							   aria-expanded="true" aria-controls="collapseIntro">-->
-				<!--								Introduction</a>-->
-				<!--						</h5>-->
-				<!--					</div>-->
-				<!---->
-				<!--					<div id="collapseIntro" class="collapse show" role="tabpanel"-->
-				<!--					     aria-labelledby="headingIntro" data-parent="#tasks">-->
-				<!--						<div class="card-body intro">-->
-				<!--							<p>Your goal is to solve tasks by submitting pieces of code. You-->
-				<!--								might have seen some of the tasks already, but we gave them a-->
-				<!--								twist to make them more entertaining. Each task is going to-->
-				<!--								have a winner and an award for the best (shortest) submission.</p>-->
-				<!--							<p>You can submit as many solutions to each task as you desire.-->
-				<!--								Each submission is graded independently. The list of your-->
-				<!--								submissions is stored in session, so you might want back them-->
-				<!--								up. Submissions are kept secret until the end of the-->
-				<!--								competition, which is at midnight.</p>-->
-				<!--							<p>In order to participate, you must provide an email address.-->
-				<!--								It is will only be used to inform you about the best solutions-->
-				<!--								and submission statistics, and to announce the winners.</p>-->
-				<!--							<p>Good luck!</p>-->
-				<!--							<form>-->
-				<!--								<div class="form-group">-->
-				<!--									<label for="email" class="emailLabel">Email address:</label> <input-->
-				<!--										 type="email" class="form-control" id="email"-->
-				<!--										 aria-describedby="emailHelp" placeholder="Enter email"-->
-				<!--										 value="--><? //= $_SESSION['email'] ?><!--">-->
-				<!--								</div>-->
-				<!--							</form>-->
-				<!--						</div>-->
-				<!--					</div>-->
-				<!--				</div>-->
-              
               <?php
                 foreach ($services->tasks as $task) {
                   ?>
@@ -207,7 +170,7 @@
                 $submissions = fetchSubmissions($_SESSION['all']);
                 if (empty($submissions)) {
                   ?>
-					<p class="empty">You don't have any submissions</p>
+					<p class="empty">You don't have any submissions.</p>
                   <?php
                 } else {
                   printSubmissions($submissions);
