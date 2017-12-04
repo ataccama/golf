@@ -4,7 +4,8 @@ date_default_timezone_set('Europe/Prague');
 require './Carbon.php';
 use Carbon\Carbon;
 
-define("BACKEND", "http://35.189.125.66:8080");
+// uncomment and fill the correct IP address
+//define("BACKEND", "http://35.189.125.66:8080");
 
 if (empty($_SESSION['all'])) {
     $_SESSION['all'] = [];
@@ -18,6 +19,9 @@ if (empty($_SESSION['email'])) {
 
 function send($method, $endpoint, $body = NULL)
 {
+    if (!defined(BACKEND)) {
+        return NULL;
+    }
     $ch = curl_init(BACKEND . $endpoint);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);

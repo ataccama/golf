@@ -106,6 +106,9 @@
 </div>
 
 <div class="container py-5">
+<?php
+if (!empty($service->tasks)) {
+?>
 	<div class="row content">
 		<div class="col-12 mb-4">
 			<h2>Tasks</h2>
@@ -179,6 +182,20 @@
 			</div>
 		</div>
 	</div>
+<?php
+} else {
+?>
+	<div class="row content">
+		<div class="col-12 mb-4">
+			<center><big>
+				The competition is currently not running.
+				Please <a href="https://www.ataccama.com/company/contact">contact Ataccama</a> if you have any questions.
+			</big></center>
+		</div>
+	</div>
+<?php
+}
+?>
 </div>
 </body>
 </html>
