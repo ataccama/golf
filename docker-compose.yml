@@ -35,6 +35,12 @@ services:
     depends_on:
     - postgres
     - rabbitmq
+  frontend:
+    image: juriad/frontend
+    ports:
+    - 80:80
+    depends_on:
+    - gateway
   grader-fib:
     image: juriad/grader-fib
     environment:

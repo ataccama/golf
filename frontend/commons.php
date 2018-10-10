@@ -5,7 +5,7 @@ require './Carbon.php';
 use Carbon\Carbon;
 
 // uncomment and fill the correct IP address
-//define("BACKEND", "http://35.189.125.66:8080");
+define("BACKEND", "http://gateway:8080");
 
 if (empty($_SESSION['all'])) {
     $_SESSION['all'] = [];
@@ -19,7 +19,7 @@ if (empty($_SESSION['email'])) {
 
 function send($method, $endpoint, $body = NULL)
 {
-    if (!defined(BACKEND)) {
+    if (!defined("BACKEND")) {
         return NULL;
     }
     $ch = curl_init(BACKEND . $endpoint);
@@ -32,7 +32,9 @@ function send($method, $endpoint, $body = NULL)
             'Content-Length: ' . strlen($body)
         ));
     }
-    return json_decode(curl_exec($ch), false);
+
+    $ret = curl_exec($ch);
+    return json_decode($ret, false);
 }
 
 function fetchSubmissions($ids)

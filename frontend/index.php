@@ -107,7 +107,7 @@
 
 <div class="container py-5">
 <?php
-if (!empty($service->tasks)) {
+if (!empty($services->tasks)) {
 ?>
 	<div class="row content">
 		<div class="col-12 mb-4">
