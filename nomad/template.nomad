@@ -18,7 +18,7 @@ job [[ .id ]] {
     task "rabbitmq" {
       driver = "docker"
       config {
-        image = "juriad/rabbitmq"
+        image = "juriad/rabbitmq:1.0"
         mounts = [
           {
             target = "/var/lib/rabbitmq"
@@ -118,8 +118,7 @@ job [[ .id ]] {
     task "frontend" {
       driver = "docker"
       config {
-        image = "juriad/frontend"
-        force_pull = true
+        image = "juriad/frontend:1.0"
         port_map = {
           http = 80
         }
@@ -158,8 +157,7 @@ job [[ .id ]] {
     task "gateway" {
       driver = "docker"
       config {
-        image = "juriad/gateway"
-        force_pull = true
+        image = "juriad/gateway:1.0"
         port_map {
           http = 8080
         }
@@ -212,8 +210,7 @@ job [[ .id ]] {
     task "grader-fib" {
       driver = "docker"
       config {
-        image = "juriad/grader-fib"
-        force_pull = true
+        image = "juriad/grader-fib:1.0"
       }
 
       env {
@@ -237,8 +234,7 @@ job [[ .id ]] {
     task "processor-java" {
       driver = "docker"
       config {
-        image = "juriad/processor-java"
-        force_pull = true
+        image = "juriad/processor-java:1.0"
         mounts = [
           {
             target = "/solutions"
@@ -266,7 +262,7 @@ job [[ .id ]] {
       }
 
       env {
-        DOCKER_IMAGE = "juriad/runner-java"
+        DOCKER_IMAGE = "juriad/runner-java:1.0"
         DOCKER_TIMEOUT = "5000"
         DOCKER_HOST = "[[ .id ]]-be-dind.service"
         RABBIT_HOST = "[[ .id ]]-dep-rabbitmq.service"

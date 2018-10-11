@@ -1,4 +1,4 @@
-FROM juriad/base
+FROM juriad/base:1.0
 
 ENV RABBIT_HOST= \
 	RABBIT_PORT=5672 \
