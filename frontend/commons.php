@@ -43,13 +43,15 @@ function fetchSubmissions($ids)
     if (! empty($ids)) {
         $submissions = send('GET', '/check?ids=' . implode(',', $_SESSION['all']));
 
-        $remove = [];
-        foreach ($submissions as $submission) {
-            if ($submission->finished) {
-                $remove[] = $submission->id;
+        if (! empty($submissions)) {
+            $remove = [];
+            foreach ($submissions as $submission) {
+                if ($submission->finished) {
+                    $remove[] = $submission->id;
+                }
             }
+            $_SESSION['unfinished'] = array_diff($_SESSION['unfinished'], $remove);
         }
-        $_SESSION['unfinished'] = array_diff($_SESSION['unfinished'], $remove);
     }
 
     return $submissions;
@@ -109,7 +111,7 @@ function printSubmissions($submissions)
 			<?= $submission->language ?> &raquo;
 			<?php
         echo submissionState($submission);
-        if ($submission->gradingScore > 0) {
+        if (! empty($submission->gradingScore)) {
             echo " (" . $submission->gradingScore . ")";
         }
         echo " <small>" . printInstant($submission->created) . "</small>";

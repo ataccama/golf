@@ -16,4 +16,6 @@ for classfile in *.class; do
         exit 0;
     fi
 done
+
+>&2 echo "No main method was found."
 exit 2

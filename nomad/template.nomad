@@ -118,7 +118,7 @@ job [[ .id ]] {
     task "frontend" {
       driver = "docker"
       config {
-        image = "juriad/frontend:1.0"
+        image = "juriad/frontend:1.1"
         port_map = {
           http = 80
         }
@@ -234,7 +234,10 @@ job [[ .id ]] {
     task "processor-java" {
       driver = "docker"
       config {
-        image = "juriad/processor-java:1.0"
+        image = "juriad/processor-java:1.1"
+        volumes = [
+          "/var/run/docker.sock:/var/run/docker.sock"
+        ]
         mounts = [
           {
             target = "/solutions"
@@ -247,70 +250,16 @@ job [[ .id ]] {
               }
             }
           },
-          {
-            target = "/var/lib/docker"
-            source = "[[ .id ]]-docker"
-
-            volume_options {
-              no_copy = false
-              driver_config {
-                name = "local"
-              }
-            }
-          }
         ]
       }
 
       env {
         DOCKER_IMAGE = "juriad/runner-java:1.0"
         DOCKER_TIMEOUT = "5000"
-        DOCKER_HOST = "[[ .id ]]-be-dind.service"
+        DOCKER_HOST = "unix:///var/run/docker.sock"
         RABBIT_HOST = "[[ .id ]]-dep-rabbitmq.service"
         RABBIT_USERNAME = "rabbituser"
         RABBIT_PASSWORD = "rabbitpw"
-      }
-      
-      service {
-      }
-
-      resources {
-        cpu = 500
-        memory = 1000
-        network {
-          mbits = 100
-        }
-      }
-    }
-    
-    task "dind" {
-      driver = "docker"
-      config {
-        image = "docker:stable-dind"
-        privileged = true
-        mounts = [
-          {
-            target = "/solutions"
-            source = "[[ .id ]]-solutions"
-
-            volume_options {
-              no_copy = false
-              driver_config {
-                name = "local"
-              }
-            }
-          },
-          {
-            target = "/var/lib/docker"
-            source = "[[ .id ]]-docker"
-
-            volume_options {
-              no_copy = false
-              driver_config {
-                name = "local"
-              }
-            }
-          }
-        ]
       }
       
       service {

@@ -1,7 +1,7 @@
 version: '2'
 services:
   rabbitmq:
-    image: juriad/rabbitmq
+    image: juriad/rabbitmq:1.0
     ports:
     - 5672:5672
     - 15672:15672
@@ -22,7 +22,7 @@ services:
     volumes:
     - pgdata:/var/lib/postgresql/data/pgdata
   gateway:
-    image: juriad/gateway
+    image: juriad/gateway:1.0
     ports:
     - 8080:8080
     environment:
@@ -36,39 +36,35 @@ services:
     - postgres
     - rabbitmq
   frontend:
-    image: juriad/frontend
+    image: juriad/frontend:1.1
     ports:
     - 80:80
+    environment:
+      BACKEND: http://gateway:8080
     depends_on:
     - gateway
   grader-fib:
-    image: juriad/grader-fib
+    image: juriad/grader-fib:1.0
     environment:
       RABBIT_HOST: rabbitmq
       RABBIT_USERNAME: rabbituser
       RABBIT_PASSWORD: rabbitpw
     depends_on:
     - rabbitmq
-  grader-quine:
-    image: juriad/grader-quine
-    environment:
-      RABBIT_HOST: rabbitmq
-      RABBIT_USERNAME: rabbituser
-      RABBIT_PASSWORD: rabbitpw
-    depends_on:
-    - rabbitmq
-  dind:
-    image: docker:stable-dind
-    privileged: true
-    volumes:
-    - docker:/var/lib/docker
-    - solutions:/solutions
+#  grader-quine:
+#    image: juriad/grader-quine:1.0
+#    environment:
+#      RABBIT_HOST: rabbitmq
+#      RABBIT_USERNAME: rabbituser
+#      RABBIT_PASSWORD: rabbitpw
+#    depends_on:
+#    - rabbitmq
   processor-java:
-    image: juriad/processor-java
+    image: juriad/processor-java:1.1
     environment:
       DOCKER_IMAGE: juriad/runner-java
       DOCKER_TIMEOUT: 5000
-      DOCKER_HOST: dind
+      DOCKER_HOST: unix:///var/run/docker.sock
       RABBIT_HOST: rabbitmq
       RABBIT_USERNAME: rabbituser
       RABBIT_PASSWORD: rabbitpw
@@ -76,13 +72,11 @@ services:
     ports:
     - 5005:5005
     volumes:
-    - docker:/var/lib/docker
+    - /var/run/docker.sock:/var/run/docker.sock
     - solutions:/solutions
     depends_on:
     - rabbitmq
-    - dind
 volumes:
   solutions: null
-  docker: null
   pgdata: null
   rabbitdata: null

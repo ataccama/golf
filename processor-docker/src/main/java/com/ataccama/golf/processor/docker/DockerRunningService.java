@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,10 @@ import com.spotify.docker.client.exceptions.ContainerNotFoundException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerCreation;
+import com.spotify.docker.client.messages.ContainerMount;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.HostConfig.Bind;
+import com.spotify.docker.client.messages.Volume;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -91,7 +93,7 @@ public class DockerRunningService implements RunningService, ApplicationListener
 
 		ScheduledFuture<?> s1 = null;
 		ScheduledFuture<?> s2 = null;
-		AtomicInteger statusCode = new AtomicInteger(-1);
+		AtomicLong statusCode = new AtomicLong(-1L);
 		try {
 			startContainer(containerId);
 			CountDownLatch latch = new CountDownLatch(1);
@@ -111,7 +113,7 @@ public class DockerRunningService implements RunningService, ApplicationListener
 			s1.cancel(true);
 			s2.cancel(true);
 
-			int status = statusCode.get();
+			long status = statusCode.get();
 			log.debug("Ended with status " + status);
 			if (status < 0) {
 				throw new RunningTimeoutException(timeout);
@@ -126,13 +128,17 @@ public class DockerRunningService implements RunningService, ApplicationListener
 	private String createContainer(File solutionDir) throws RunningInternalErrorException, InterruptedException {
 		log.debug("Creating container " + dockerImage);
 
-		final HostConfig hostConfig = HostConfig.builder()
-				.appendBinds(Bind.from(solutionDir.getAbsolutePath()).to("/solution").readOnly(false).build()).build();
-		ContainerConfig containerConfig = ContainerConfig.builder().image(dockerImage).hostConfig(hostConfig)
-				.networkDisabled(true).build();
-
 		ContainerCreation containerCreation;
 		try {
+			ContainerMount containerMount = docker.inspectContainer(System.getenv("HOSTNAME")).mounts().stream()
+					.filter(cm -> cm.destination().equals("/solutions")).findFirst()
+					.orElseThrow(() -> new RunningInternalErrorException("Couldn't find the solutions volume."));
+			final HostConfig hostConfig = HostConfig.builder()
+					.appendBinds(Bind.from(new File(containerMount.source(), solutionDir.getName()).getPath())
+							.to("/solution").readOnly(false).build())
+					.build();
+			ContainerConfig containerConfig = ContainerConfig.builder().image(dockerImage).hostConfig(hostConfig)
+					.networkDisabled(true).build();
 			containerCreation = docker.createContainer(containerConfig);
 		} catch (DockerException e) {
 			throw new RunningInternalErrorException("Failed to create docker container.", e);
@@ -166,21 +172,21 @@ public class DockerRunningService implements RunningService, ApplicationListener
 		}
 	}
 
-	private Integer waitForContainer(String containerId) {
+	private Long waitForContainer(String containerId) {
 		log.debug("Waiting for container " + containerId);
 
 		try {
 			return docker.waitContainer(containerId).statusCode();
 		} catch (DockerException e) {
 			log.warn("Error while waiting for container " + containerId, e);
-			return -1;
+			return -1L;
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
-			return -1;
+			return -1L;
 		}
 	}
 
-	private void reportFailure(String containerId, Integer statusCode)
+	private void reportFailure(String containerId, Long statusCode)
 			throws RunningFailedException, InterruptedException {
 		String log = null;
 		try {
