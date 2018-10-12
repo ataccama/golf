@@ -131,7 +131,7 @@ job [[ .id ]] {
       service {
         port = "http"
         tags = [
-          "lb.frontend.rule=Host:[[ .id ]].[[ .dc ]].atc",
+          "lb.frontend.rule=Host:task.ataccama.com",
           "lb.tags=public",
           "lb.tags=http"
         ]
@@ -174,11 +174,6 @@ job [[ .id ]] {
 
       service {
         port = "http"
-        tags = [
-          "lb.frontend.rule=Host:api.[[ .id ]].[[ .dc ]].atc",
-          "lb.tags=public",
-          "lb.tags=http"
-        ]
         check {
           type = "tcp"
           interval = "10s"
