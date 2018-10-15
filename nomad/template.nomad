@@ -4,7 +4,7 @@ job [[ .id ]] {
   type = "service"
   meta {
     "Deployed by" = "[[ .author ]]"
-    "URL" = "https://[[ .id ]].[[ .dc ]].atc"
+    "URL" = "https://task.ataccama.com"
   }
 
   group "dep" {
@@ -115,6 +115,11 @@ job [[ .id ]] {
   group "fe" {
     count = 1
 
+    constraint {
+      attribute = "${attr.unique.hostname}"
+      value     = "n05"
+    }
+
     task "frontend" {
       driver = "docker"
       config {
@@ -148,7 +153,7 @@ job [[ .id ]] {
         network {
           mbits = 100
           port "http" {
-            static = "80"
+            static = "18081"
           }
         }
       }
