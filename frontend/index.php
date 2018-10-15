@@ -83,19 +83,19 @@
 							Each submission is graded independently. The list of your
 							submissions is stored in session, so you might want back them
 							up. Submissions are kept secret until the end of the
-							competition, which is at midnight.</p>
+							competition.</p>
+						<p>Good luck!</p>
 					</div>
 					<div class="col-12 col-md-6">
-						<p>In order to participate, <strong>you must provide an email address</strong>.
-							It will only be used to inform you about the best solutions
-							and submission statistics, and to announce the winners.</p>
-						<p>Good luck!</p>
 						<form>
 							<div class="form-group">
-								<label for="email" class="emailLabel">Your email address:</label> <input
+								<p><span class="emailLabel">Your email address</span><br>
+								The email allows us to identify the winners.</p>
+								<input
 									 type="email" class="form-control" id="email"
 									 aria-describedby="emailHelp" placeholder="Enter email"
 									 value="<?= $_SESSION['email'] ?>">
+								<p><small>By submitting your email address, you agree to the Ataccama <a href="https://www.ataccama.com/legal/privacy-policy/">privacy policy</a>.</small></p>
 							</div>
 						</form>
 					</div>

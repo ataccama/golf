@@ -123,7 +123,7 @@ job [[ .id ]] {
     task "frontend" {
       driver = "docker"
       config {
-        image = "juriad/frontend:1.1"
+        image = "juriad/frontend:1.2"
         port_map = {
           http = 80
         }
