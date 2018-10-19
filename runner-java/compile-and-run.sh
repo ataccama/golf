@@ -1,10 +1,26 @@
 #!/bin/bash
 
-set -e
+f=code.java
+mv code "$f"
+out=`javac "$f" 2>&1`
+ex=$?
 
-mv code code.java
-javac code.java
-rm code.java
+if [ $ex -gt 0 ]; then
+	if grep -q "is public, should be declared in a file named" <<<$out; then
+		set -e
+		f=`sed -n '/is public, should be declared in a file named/ { s/.*file named \(.*\)/\1/; p; q}' <<<$out`
+		mv code.java "$f"
+		javac "$f"
+	else
+		>&2 echo "$out"
+		exit $ex
+	fi
+else
+	f=code.java
+fi
+rm "$f"
+
+set -e
 
 for classfile in *.class; do
     classname=${classfile%.*}

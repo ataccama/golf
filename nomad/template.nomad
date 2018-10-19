@@ -254,7 +254,7 @@ job [[ .id ]] {
       }
 
       env {
-        DOCKER_IMAGE = "juriad/runner-java:1.0"
+        DOCKER_IMAGE = "juriad/runner-java:1.1"
         DOCKER_TIMEOUT = "5000"
         DOCKER_HOST = "unix:///var/run/docker.sock"
         RABBIT_HOST = "[[ .id ]]-dep-rabbitmq.service"
