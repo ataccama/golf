@@ -36,15 +36,25 @@ services:
     - postgres
     - rabbitmq
   frontend:
-    image: juriad/frontend:1.1
+    image: juriad/frontend:1.3
     ports:
     - 80:80
     environment:
       BACKEND: http://gateway:8080
     depends_on:
     - gateway
+    volumes:
+    - ./frontend:/var/www/html/
+  grader-prime:
+    image: juriad/grader-prime:1.0
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USERNAME: rabbituser
+      RABBIT_PASSWORD: rabbitpw
+    depends_on:
+    - rabbitmq
   grader-fib:
-    image: juriad/grader-fib:1.0
+    image: juriad/grader-fib:1.1
     environment:
       RABBIT_HOST: rabbitmq
       RABBIT_USERNAME: rabbituser
@@ -60,7 +70,7 @@ services:
 #    depends_on:
 #    - rabbitmq
   processor-java:
-    image: juriad/processor-java:1.1
+    image: juriad/processor-java:1.2
     environment:
       DOCKER_IMAGE: juriad/runner-java:1.1
       DOCKER_TIMEOUT: 5000

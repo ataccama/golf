@@ -23,6 +23,7 @@ import com.ataccama.golf.processor.processing.errors.RunningException;
 import com.ataccama.golf.processor.processing.errors.RunningFailedException;
 import com.ataccama.golf.processor.processing.errors.RunningInternalErrorException;
 import com.ataccama.golf.processor.processing.errors.RunningTimeoutException;
+
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerClient.LogsParam;
@@ -83,7 +84,7 @@ public class DockerRunningService implements RunningService, ApplicationListener
 	}
 
 	@Override
-	public void run(File solutionDir) throws RunningException, InterruptedException {
+	public void run(File solutionDir, boolean allowTimeout) throws RunningException, InterruptedException {
 		if (docker == null) {
 			log.warn("No processing is possible until docker is ready.");
 			return;
@@ -115,7 +116,7 @@ public class DockerRunningService implements RunningService, ApplicationListener
 
 			long status = statusCode.get();
 			log.debug("Ended with status " + status);
-			if (status < 0) {
+			if (status < 0 && !allowTimeout) {
 				throw new RunningTimeoutException(timeout);
 			} else if (status > 0) {
 				reportFailure(containerId, status);
@@ -130,15 +131,20 @@ public class DockerRunningService implements RunningService, ApplicationListener
 
 		ContainerCreation containerCreation;
 		try {
-			ContainerMount containerMount = docker.inspectContainer(System.getenv("HOSTNAME")).mounts().stream()
-					.filter(cm -> cm.destination().equals("/solutions")).findFirst()
+			ContainerMount containerMount = docker.inspectContainer(System.getenv("HOSTNAME"))
+					.mounts()
+					.stream()
+					.filter(cm -> cm.destination().equals("/solutions"))
+					.findFirst()
 					.orElseThrow(() -> new RunningInternalErrorException("Couldn't find the solutions volume."));
 			final HostConfig hostConfig = HostConfig.builder()
 					.appendBinds(Bind.from(new File(containerMount.source(), solutionDir.getName()).getPath())
-							.to("/solution").readOnly(false).build())
+							.to("/solution")
+							.readOnly(false)
+							.build())
 					.build();
-			ContainerConfig containerConfig = ContainerConfig.builder().image(dockerImage).hostConfig(hostConfig)
-					.networkDisabled(true).build();
+			ContainerConfig containerConfig =
+					ContainerConfig.builder().image(dockerImage).hostConfig(hostConfig).networkDisabled(true).build();
 			containerCreation = docker.createContainer(containerConfig);
 		} catch (DockerException e) {
 			throw new RunningInternalErrorException("Failed to create docker container.", e);
@@ -186,8 +192,7 @@ public class DockerRunningService implements RunningService, ApplicationListener
 		}
 	}
 
-	private void reportFailure(String containerId, Long statusCode)
-			throws RunningFailedException, InterruptedException {
+	private void reportFailure(String containerId, Long statusCode) throws RunningFailedException, InterruptedException {
 		String log = null;
 		try {
 			LogStream logStream = docker.logs(containerId, LogsParam.stderr(), LogsParam.stdout(), LogsParam.tail(20));

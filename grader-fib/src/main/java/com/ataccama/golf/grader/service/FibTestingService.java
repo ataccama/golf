@@ -2,9 +2,6 @@ package com.ataccama.golf.grader.service;
 
 import org.springframework.stereotype.Component;
 
-import com.ataccama.golf.grader.service.TestingException;
-import com.ataccama.golf.grader.service.TestingService;
-
 @Component
 public class FibTestingService implements TestingService {
 

@@ -78,7 +78,7 @@
 						<p>Your goal is to solve tasks by submitting pieces of code. You
 							might have seen some of the tasks already, but we gave them a
 							twist to make them more entertaining. <strong>Each task is going to
-								have a winner and an award for the best (shortest) submission</strong>.</p>
+							have a winner and an award for the best submission.</strong></p>
 						<p>You can submit as many solutions to each task as you desire.
 							Each submission is graded independently. The list of your
 							submissions is stored in session, so you might want back them

@@ -1,3 +1,4 @@
 id: golf
-dc: dev1
+dc: one-prod
+region: aws-use1
 author: Adam

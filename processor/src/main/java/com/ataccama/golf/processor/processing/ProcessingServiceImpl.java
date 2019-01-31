@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class ProcessingServiceImpl implements ProcessingService {
-	private static final int MAX_LENGTH = 1 << 12; // 16 kB
+	private static final int MAX_LENGTH = 1 << 24; // 16 MB
 	private static final String ROOT_DIR = "/solutions";
 
 	@Autowired
@@ -80,11 +80,10 @@ public class ProcessingServiceImpl implements ProcessingService {
 		}
 	}
 
-	private void run(SolutionProcessedMessage processedMessage, File solutionDir)
-			throws RunningException, InterruptedException {
+	private void run(SolutionProcessedMessage processedMessage, File solutionDir) throws RunningException, InterruptedException {
 		processedMessage.setProcessingStarted(Instant.now());
 		try {
-			runningService.run(solutionDir);
+			runningService.run(solutionDir, true); // TODO parametrize allowTimeout
 			processedMessage.setProcessingResult(SolutionResult.OK);
 		} catch (RunningTimeoutException e) {
 			processedMessage.setProcessingResult(SolutionResult.TIMEOUT);

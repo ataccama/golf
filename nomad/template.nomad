@@ -1,5 +1,5 @@
 job [[ .id ]] {
-  region = "prg-krl"
+  region = "[[ .region ]]"
   datacenters = [ "[[ .dc ]]" ]
   type = "service"
   meta {
@@ -12,7 +12,7 @@ job [[ .id ]] {
     
     constraint {
       attribute = "${attr.unique.hostname}"
-      value     = "n02"
+      value     = "n01a"
     }
     
     task "rabbitmq" {
@@ -52,7 +52,6 @@ job [[ .id ]] {
         cpu = 500
         memory = 1000
         network {
-          mbits = 100
           port "rmq" {
             static = "5672"
           }
@@ -103,34 +102,24 @@ job [[ .id ]] {
         cpu = 500
         memory = 1000
         network {
-          mbits = 100
           port "pg" {
             static = "5432"
           }
         }
       }
     }
-  }
-  
-  group "fe" {
-    count = 1
-
-    constraint {
-      attribute = "${attr.unique.hostname}"
-      value     = "n05"
-    }
 
     task "frontend" {
       driver = "docker"
       config {
-        image = "juriad/frontend:1.2"
+        image = "juriad/frontend:1.4"
         port_map = {
           http = 80
         }
       }
 
       env {
-        BACKEND = "http://[[ .id ]]-fe-gateway.service:18080"
+        BACKEND = "http://[[ .id ]]-dep-gateway.service:18080"
       }
 
       service {
@@ -151,7 +140,6 @@ job [[ .id ]] {
         cpu = 500
         memory = 1000
         network {
-          mbits = 100
           port "http" {
             static = "18081"
           }
@@ -190,27 +178,17 @@ job [[ .id ]] {
         cpu = 500
         memory = 1000
         network {
-          mbits = 100
           port "http" {
             static = "18080"
           }
         }
       }
     }
-  }
-  
-  group "be" {
-    count = 1
-    
-    constraint {
-      attribute = "${attr.unique.hostname}"
-      value     = "n06"
-    }
     
     task "grader-fib" {
       driver = "docker"
       config {
-        image = "juriad/grader-fib:1.0"
+        image = "juriad/grader-fib:1.2"
       }
 
       env {
@@ -226,7 +204,29 @@ job [[ .id ]] {
         cpu = 500
         memory = 1000
         network {
-          mbits = 100
+        }
+      }
+    }
+
+    task "grader-prime" {
+      driver = "docker"
+      config {
+        image = "juriad/grader-prime:1.1"
+      }
+
+      env {
+        RABBIT_HOST = "[[ .id ]]-dep-rabbitmq.service"
+        RABBIT_USERNAME = "rabbituser"
+        RABBIT_PASSWORD = "rabbitpw"
+      }
+
+      service {
+      }
+
+      resources {
+        cpu = 500
+        memory = 1000
+        network {
         }
       }
     }
@@ -234,7 +234,7 @@ job [[ .id ]] {
     task "processor-java" {
       driver = "docker"
       config {
-        image = "juriad/processor-java:1.1"
+        image = "juriad/processor-java:1.2"
         volumes = [
           "/var/run/docker.sock:/var/run/docker.sock"
         ]
@@ -269,7 +269,6 @@ job [[ .id ]] {
         cpu = 500
         memory = 1000
         network {
-          mbits = 100
         }
       }
     }

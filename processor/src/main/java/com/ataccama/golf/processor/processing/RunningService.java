@@ -5,5 +5,5 @@ import java.io.File;
 import com.ataccama.golf.processor.processing.errors.RunningException;
 
 public interface RunningService {
-	public void run(File solutionDir) throws RunningException, InterruptedException;
+	void run(File solutionDir, boolean allowTimeout) throws RunningException, InterruptedException;
 }

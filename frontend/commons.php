@@ -111,7 +111,7 @@ function printSubmissions($submissions)
 			<?= $submission->language ?> &raquo;
 			<?php
         echo submissionState($submission);
-        if (! empty($submission->gradingScore)) {
+        if (isset($submission->gradingScore)) {
             echo " (" . $submission->gradingScore . ")";
         }
         echo " <small>" . printInstant($submission->created) . "</small>";
@@ -146,7 +146,7 @@ function printSubmissions($submissions)
 				<dt class="col-sm-4">P End</dt>
 				<dd class="col-sm-8"><?= printInstant($submission->processingEnded, true) ?></dd>
 <?php
-            if (! empty($submission->processingMessage)) {
+            if (isset($submission->processingMessage)) {
                 ?>
 				<dt class="col-sm-4">P Message</dt>
 				<dd class="col-sm-8"><?php ?><pre><?php ?><code><?= $submission->processingMessage ?></code><?php ?></pre><?php ?></dd>
@@ -164,13 +164,13 @@ function printSubmissions($submissions)
 				<dt class="col-sm-4">G End</dt>
 				<dd class="col-sm-8"><?= printInstant($submission->gradingEnded, true) ?></dd>
 <?php
-            if (! empty($submission->gradingMessage)) {
+            if (isset($submission->gradingMessage)) {
                 ?>
 				<dt class="col-sm-4">G Message</dt>
 				<dd class="col-sm-8"><?php ?><pre><?php ?><code><?= $submission->gradingMessage ?></code><?php ?></pre><?php ?></dd>
 				<?php
             }
-            if (! empty($submission->gradingScore)) {
+            if (isset($submission->gradingScore)) {
                 ?>
 				<dt class="col-sm-4">G Score</dt>
 				<dd class="col-sm-8"><?= $submission->gradingScore ?></dd>
