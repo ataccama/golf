@@ -1,5 +1,6 @@
 package com.ataccama.golf.gateway.web;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -59,28 +60,28 @@ public class GatewayController {
 
 	private void validateNewSolution(NewSolution dto) {
 		if (dto.getEmail() == null || !dto.getEmail().matches("[a-zA-Z.+]+@[a-zA-Z.+]+")) {
-			throw new BadRequestException("Invalid email.");
+			throw new BadRequestException(MessageFormat.format("Invalid email: {0}.", dto.getEmail()));
 		}
 
 		if (dto.getCode() == null) {
 			throw new BadRequestException("The code is not specified.");
 		}
 		if (dto.getCode().length() > Constants.MAX_CODE_SIZE) {
-			throw new BadRequestException("The source code is too big.");
+			throw new BadRequestException(MessageFormat.format("The source code is too big: {0}.", dto.getCode().length()));
 		}
 
 		if (dto.getLanguage() == null) {
 			throw new BadRequestException("The language is not specified.");
 		}
 		if (!registry.contains(ServiceType.LANGUAGE, dto.getLanguage())) {
-			throw new BadRequestException("The language is not supported.");
+			throw new BadRequestException(MessageFormat.format("The language is not supported: {0}.", dto.getLanguage()));
 		}
 
 		if (dto.getTask() == null) {
 			throw new BadRequestException("The task is not specified.");
 		}
 		if (!registry.contains(ServiceType.TASK, dto.getTask())) {
-			throw new BadRequestException("The task is not supported.");
+			throw new BadRequestException(MessageFormat.format("The task is not supported: {0}.", dto.getTask()));
 		}
 	}
 

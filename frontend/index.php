@@ -40,7 +40,7 @@
 
 	<script src="./ezbsalert.js"></script>
 	<link rel="stylesheet" href="./main.css?v=2">
-	<script type="text/javascript" src="./script.js?v=1"></script>
+	<script type="text/javascript" src="./script.js?v=2"></script>
 	<!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

@@ -97,6 +97,14 @@ $(document).ready(function() {
 				});
 				return;
 			}
+			var MAX_CODE_SIZE = 1<<15; // defined on BACKEND
+			if (code.length > MAX_CODE_SIZE) {
+				ezBSAlert({
+					messageText: "Please shorten your solution, you reached the 32K limit.",
+					alertType: "danger"
+				});
+				return;
+			}
 
 			$.ajax({
 				url : '/submit.php',

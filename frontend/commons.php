@@ -1,8 +1,23 @@
 <?php
+
+# dates
+
 date_default_timezone_set('Europe/Prague');
 
 require './Carbon.php';
 use Carbon\Carbon;
+
+# logging
+
+require './Analog.php';
+use Analog\Analog;
+
+require './AnalogStderr.php';
+
+Analog::handler (\Analog\Handler\Stderr::init ());
+Analog::$default_level = 7;
+
+# communication
 
 // uncomment and fill the correct IP address
 define("BACKEND", getenv('BACKEND'));
@@ -20,8 +35,12 @@ if (empty($_SESSION['email'])) {
 function send($method, $endpoint, $body = NULL)
 {
     if (! defined("BACKEND")) {
+        Analog::error("BACKEND is undefined");
         return NULL;
     }
+
+    Analog::debug("Sending to " . $endpoint . " data: "  . $body);
+
     $ch = curl_init(BACKEND . $endpoint);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -34,6 +53,13 @@ function send($method, $endpoint, $body = NULL)
     }
 
     $ret = curl_exec($ch);
+
+    if (curl_getinfo($ch, CURLINFO_RESPONSE_CODE) != 200) {
+        Analog::error("Request failed: "  . curl_getinfo($ch));
+    }
+
+    Analog::debug("Received data: "  . $ret);
+
     return json_decode($ret, false);
 }
 
@@ -42,6 +68,14 @@ function fetchSubmissions($ids)
     $submissions = [];
     if (! empty($ids)) {
         $submissions = send('GET', '/check?ids=' . implode(',', $_SESSION['all']));
+
+        for ($i = 0; $i < count($submissions); $i++) {
+            if (empty($submissions[$i])) {
+                Analog::warn("Could not find submission: "  . $ids[$i] . "; it is: " + json_encode($submissions[$i]));
+            }
+        }
+
+        $submissions = array_filter($submissions);
 
         if (! empty($submissions)) {
             $remove = [];

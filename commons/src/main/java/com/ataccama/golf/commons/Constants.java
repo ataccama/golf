@@ -10,7 +10,7 @@ public class Constants {
 	public static final String PROCESSOR = "processor";
 	public static final String GRADER = "grader";
 
-	public static final int MAX_CODE_SIZE = 1 << 16 - 1;
+	public static final int MAX_CODE_SIZE = 1 << 15;
 
 	private Constants() {
 	}
